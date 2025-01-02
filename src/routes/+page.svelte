@@ -1,5 +1,9 @@
 <script>
 	import { Button } from 'flowbite-svelte';
+
+	let { data } = $props();
+	let { countries } = $derived(data);
+
 	let clientIp = null;
 	let error = null;
 
@@ -37,5 +41,12 @@
 		<p class="mt-4 text-lg text-gray-700">This is a simple test page.</p>
 	</div>
 </div>
+
+<h1>Welcome to Supabase!</h1>
+<ul>
+	{#each countries as country}
+		<li>{country.name}</li>
+	{/each}
+</ul>
 
 <Button color="blue">Click Me</Button>

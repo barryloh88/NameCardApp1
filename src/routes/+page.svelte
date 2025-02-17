@@ -1,37 +1,20 @@
-<script>
+<script lang="ts">
 	import { Button } from 'flowbite-svelte';
 
 	let { data } = $props();
 	let { countries } = $derived(data);
-
-	let clientIp = null;
-	let error = null;
-
-	// Fetch data from the API route when the component loads
-	const fetchClientIp = async () => {
-		try {
-			const response = await fetch('/api/getIPaddress');
-			if (!response.ok) {
-				throw new Error('Failed to fetch client IP');
-			}
-			const data = await response.json();
-			clientIp = data.clientIp;
-		} catch (err) {
-			error = err.message;
-		}
-	};
-
-	fetchClientIp();
 </script>
 
-{#if error}
-	<p>Error: {error}</p>
-{:else if clientIp}
-	<p>Your IP Address: {clientIp}</p>
-{:else}
-	<p>Loading...</p>
-{/if}
+<main>
+	<h1>Posts</h1>
+	<ul>
+		{#each data as post}
+			<li>{post.title}</li>
+		{/each}
+	</ul>
+</main>
 
+<!-- HTML Section -->
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
 

@@ -7,6 +7,7 @@
 	let email = '';
 	let phone = '';
 	let website = '';
+	let permalink = '';
 </script>
 
 <form method="POST">
@@ -38,6 +39,11 @@
 	<label>
 		Website (optional):
 		<input type="url" name="website" />
+	</label>
+
+	<label>
+		permalink:
+		<input type="text" name="permalink" />
 	</label>
 
 	<button type="submit">Create Namecard</button>

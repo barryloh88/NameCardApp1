@@ -13,11 +13,29 @@ export const actions = {
     const email = formData.get('email');
     const phone = formData.get('phone');
     const website = formData.get('website');
-    console.log('Received data:', { name, job_title, company, email, phone, website });
+    const permalink = formData.get('permalink')
+    console.log('Received data:', { name, job_title, company, email, phone, website, permalink });
 
-    if (!name || !email) {
-      console.error('Validation failed: Name and Email are required');
-      return fail(400, { error: 'Name and Email are required' });
+    if (!name || !email || !permalink) {
+      console.error('Validation failed: Name,Email and Permalink are required');
+      return fail(400, { error: 'Name,Email and Permalink are required' });
+    }
+
+    // Check if the permalink already exists in the database
+    const { data: existingPermalink, error: permalinkError } = await supabase
+      .from('namecard')
+      .select('permalink')
+      .eq('permalink', permalink)
+      .single();
+
+    if (permalinkError && permalinkError.code !== 'PGRST116') { // Ignore "no rows found" error
+      console.error('Error checking permalink:', permalinkError);
+      return fail(400, { error: 'Error checking permalink availability' });
+    }
+
+    if (existingPermalink) {
+      console.error('Permalink already exists:', permalink);
+      return fail(400, { error: 'Permalink already taken. Please choose another one.' });
     }
 
     const { data, error } = await supabase
@@ -29,7 +47,8 @@ export const actions = {
         company,
         email,
         phone,
-        website
+        website,
+        permalink,
       }]);
 
     if (error) {
@@ -38,6 +57,6 @@ export const actions = {
     }
     console.log('Inserted data:', data);
 
-    throw redirect(303, '/display'); // Redirect after success
+    throw redirect(303, '/main'); // Redirect after success
   }
 };

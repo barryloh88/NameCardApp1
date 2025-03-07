@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import 'flowbite';
 	//let { children } = $props();
 
 	import { invalidate } from '$app/navigation';
